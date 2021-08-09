@@ -24,7 +24,7 @@
 
 \usepackage{inconsolata}
 \lstset{
-    language=c++,
+    language=sh,
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{blue},
@@ -60,6 +60,38 @@
 \begin{document}
 \maketitle
 
-Teste
+\section{Cifrador/Decifrador}
+Para a implementação do cifrador e decifrador da cifra de Vigenère foi criado um programa em python na versão 3.6, que está no arquivo \texttt{src/parte1.py}. Na execução, o programa aceita alguns parâmetros, porém pode ser executado sem nenhum da seguinte forma:
+
+\begin{lstlisting}
+python src/parte1.py        # cifrador
+python src/parte1.py -d     # decifrador
+\end{lstlisting}
+
+Pela abordagem acima, será solicitada durante a execução, uma mensagem/criptograma e uma chave e terá como saída a mensagem cifrada/decifrada de acordo com a cifra de Vigenère e com a chave informada. Conforme informado, o programa aceita certos parâmetros. Para visualizar a lista completa e o que fazem, pode ser utilizada a flag \texttt{-h} ou \texttt{--help}:
+
+\begin{lstlisting}
+python src/parte1.py -h
+\end{lstlisting}
+
+O primeiro parâmetro que pode ser passado é um arquivo que conterá a mensagem seguido do segundo que também é um arquivo onde será passada a chave. Opcionalmente, pode-se passar um arquivo de saída com a flag \texttt{-o} e, caso não seja passada, a saída (mensagem cifrada/decifrada) será printada no terminal.
+
+Para cifrar uma mensagem, pode ser executado o comando abaixo como exemplo:
+
+\begin{lstlisting}
+python src/parte1.py sample/msg.txt sample/key.txt -o sample/out.txt
+\end{lstlisting}
+
+Onde \texttt{sample/msg.txt} é a mensagem de exemplo no diretório \texttt{sample}, \texttt{sample/key.txt} é a chave e \texttt{sample/out.txt} é o arquivo onde será impressa a saída. Da mesma forma, para decifrar a mensagem cifrada com o comando anterior, pode ser usado o comando a seguir:
+
+\begin{lstlisting}
+python src/parte1.py sample/out.txt sample/key.txt -o sample/decifrada.txt -d
+\end{lstlisting}
+
+A flag \texttt{-d} ao final é que indica ao programa que a mensagem será decifrada e não cifrada. No exemplo, a saída foi definida para aparecer no arquivo \texttt{sample/decifrada.txt}.
+
+\subsection{Aspectos Técnicos}
+Toda a lógica utilizada para a implementação do cifrador/decifrador estão em um arquivo separado \texttt{src/vigenere/cipher.py}. Este arquivo tem uma função principal \texttt{cifra} que recebe uma mensagem, uma chave e uma variável booleana \texttt{opt}, que define se a mensagem deve ser cifrada (\texttt{false}) ou decifrada (\texttt{true}). Para as operações, é basicamente feita uma soma dos valores ascii da letra atual da mensagem subtraída do ascii da letra 'a' com o ascii da letra atual da \textit{keystream}.
+Com o valor obtido na operação anterior, é realizado o módulo por 26 (quantidade de letras no alfabeto) e assim, é somado novamente o valor do ascii de 'a' para obter o caractere do criptograma. Este processo é feito em loop até que se chegue ao final da mensagem, porém caracteres que não sejam letras ou acentuados não são processados e se mantém inalterados no output. Já a decifração funciona de forma muito similar à citada acima, mudando apenas a operação de soma para subtração entre o ascii da letra da mensagem e da \textit{keystream}.
 
 \end{document}

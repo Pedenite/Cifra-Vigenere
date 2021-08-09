@@ -17,7 +17,8 @@ args = parser.parse_args()
 msg = pswd = ""
 
 if args.mensagem == None:
-    msg = input("Mensagem/Criptograma > ")
+    opt = "Mensagem" if not args.d else "Criptograma"
+    msg = input(f"{opt} > ")
 else:
     with args.mensagem as file:
         msg = file.read()
