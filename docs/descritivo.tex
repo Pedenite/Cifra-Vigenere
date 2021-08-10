@@ -46,7 +46,7 @@
     inputencoding=utf8,
     extendedchars=true,
     showstringspaces=false,
-    literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {Ó}{{\'O}}1 {Ã}{{\~A}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ç}{{\.c}}1,
+    literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {Ó}{{\'O}}1 {Ã}{{\~A}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ç}{{\.c}}1 {ê}{{\^e}}1,
 }
 
 % \pagecolor[rgb]{0.1,0.1,0.1} %black
@@ -93,5 +93,40 @@ A flag \texttt{-d} ao final é que indica ao programa que a mensagem será decif
 \subsection{Aspectos Técnicos}
 Toda a lógica utilizada para a implementação do cifrador/decifrador estão em um arquivo separado \texttt{src/vigenere/cipher.py}. Este arquivo tem uma função principal \texttt{cifra} que recebe uma mensagem, uma chave e uma variável booleana \texttt{opt}, que define se a mensagem deve ser cifrada (\texttt{false}) ou decifrada (\texttt{true}). Para as operações, é basicamente feita uma soma dos valores ascii da letra atual da mensagem subtraída do ascii da letra 'a' com o ascii da letra atual da \textit{keystream}.
 Com o valor obtido na operação anterior, é realizado o módulo por 26 (quantidade de letras no alfabeto) e assim, é somado novamente o valor do ascii de 'a' para obter o caractere do criptograma. Este processo é feito em loop até que se chegue ao final da mensagem, porém caracteres que não sejam letras ou acentuados não são processados e se mantém inalterados no output. Já a decifração funciona de forma muito similar à citada acima, mudando apenas a operação de soma para subtração entre o ascii da letra da mensagem e da \textit{keystream}.
+
+\section{Ataque}
+Para o ataque à cifra de Vigenère foi criado o programa em python 3.6 ou superior que se encontra no arquivo \texttt{src/parte2.py}. O programa aceita certos parâmetros, mas pode ser executado sem nenhum da seguinte forma:
+
+\begin{lstlisting}
+python src/parte2.py        # inglês
+python src/parte2.py -p     # português
+\end{lstlisting}
+
+Com a chamada acima, será requisitado um criptograma pelo input do terminal e terá como output a chave encontrada.
+
+Para acessar a lista de parâmetros e o que fazem, existe a flag \texttt{-h} ou \texttt{--help}:
+
+\begin{lstlisting}
+python src/parte2.py -h
+\end{lstlisting}
+
+O primeiro parâmetro que pode ser passado é o arquivo em que o criptograma se encontra, e pode ser definido um arquivo para o output por meio da flag \texttt{-o}. O comando abaixo vai realizar a tentativa de descobrir a chave do criptograma encontrado no arquivo \texttt{sample/out.txt} considerando que a linguagem da mensagem original era o inglês e vai produzir esta chave no arquivo \texttt{sample/crackedkey.txt}:
+
+\begin{lstlisting}
+python src/parte2.py sample/out.txt -o sample/crackedkey.txt
+\end{lstlisting}
+
+Da mesma forma, para decifrar a mensagem em português do arquivo \texttt{sample/out\_pt.txt}, pode-se usar o comando abaixo, onde a flag \texttt{-p} indica que a mensagem é em português:
+
+\begin{lstlisting}
+python src/parte2.py sample/out_pt.txt -o sample/crackedkey.txt -p
+\end{lstlisting}
+
+\subsection{Aspectos Técnicos}
+A lógica do ataque foi toda incluída no arquivo \texttt{src/vigenere/attack.py}. Para a decifração da chave, foi utilizada a análise de frequências das letras. Para isso, foi obtida a lista de frequências padrão de cada letra na língua inglesa e portuguesa, e elas são usadas no programa para obter a diferença da frequência das letras na mensagem. A ocorrência que tiver a menor diferença representa uma letra da chave decifrada e este processo é feito em loop até encontrar toda a chave de acordo com seu tamanho obtido.
+
+Para obter o tamanho da chave, primeiramente são obtidas sequências de três letras do criptograma que se repetem e é analisada a distância entre elas. Os múltiplos dessa distância são "marcados" a cada vez e o número que tiver a maior quantidade de marcas ao final é o tamanho da chave. Esta abordagem funciona para muitos casos se o tamanho da chave for um número primo. Caso contrário, o valor retornado será algum dos múltiplos do tamanho da chave.
+
+Em alguns casos, pode ser que o algoritmo de quebra da cifra de Vigenère não funcione corretamente. Um exemplo seria com mensagens muito pequenas já que é feita a análise de frequências. O tamanho mínimo testado que gerou o resultado esperado foi para uma mensagem de 1500 letras.
 
 \end{document}
