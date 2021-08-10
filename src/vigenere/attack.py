@@ -12,13 +12,26 @@ def breaker(mensagem, lang_freq_list):
     if (keysize == 0):
         return "FALHA: Não foi possível encontrar a chave!"
 
-    print("keysize:", keysize)
+    print("key size:", keysize)
+    
     msg_freq = msg_letter_frequency(msg, keysize)
+    result_key = ""
     for i in range(keysize):
+        menor_diff = ('a', 999999999)
         for j in range(26):
-            pass ## shift alphabet
+            diff = 0
+            for k in range(26):
+                loop_chr = chr(ord('a') + k)
+                shifted_chr = chr((ord(loop_chr)-ord('a') + j)%26 + ord('a'))
+                if shifted_chr in msg_freq[i]:
+                    diff += abs(msg_freq[i][shifted_chr] - lang_freq_list[loop_chr])
 
-    return keysize
+            if diff < menor_diff[1]:
+                menor_diff = (chr(ord('a') + j), diff)
+
+        result_key += menor_diff[0]
+
+    return result_key
 
 def find_keysize(msg):
     crivo = [0] * (MAXIMUM_KEYSIZE+1)
@@ -35,7 +48,7 @@ def find_keysize(msg):
             if DEBUG_LOGGING:
                 print(dist, '\t', msg[j], msg[j+1], msg[j+2], sep='', end='\t')
 
-            for k in range(2, len(crivo)):
+            for k in range(3, len(crivo)):
                 if k > dist:
                     break
 

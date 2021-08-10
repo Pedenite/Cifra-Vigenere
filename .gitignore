@@ -2,7 +2,7 @@
 sample/*
 !sample/key.txt
 !sample/msg.txt
-!sample/out.txt
+!sample/msg_pt.txt
 
 # Latex files
 *.aux
