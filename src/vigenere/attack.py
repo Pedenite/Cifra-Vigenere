@@ -48,7 +48,7 @@ def find_keysize(msg):
             if DEBUG_LOGGING:
                 print(dist, '\t', msg[j], msg[j+1], msg[j+2], sep='', end='\t')
 
-            for k in range(3, len(crivo)):
+            for k in range(len(crivo)-1, 2, -1):
                 if k > dist:
                     break
 
@@ -56,6 +56,7 @@ def find_keysize(msg):
                     crivo[k] += 1
                     if DEBUG_LOGGING:
                         print(k, end=' ')
+                    break
             
             if DEBUG_LOGGING:
                 print()

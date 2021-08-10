@@ -125,7 +125,7 @@ python src/parte2.py sample/out_pt.txt -o sample/crackedkey.txt -p
 \subsection{Aspectos Técnicos}
 A lógica do ataque foi toda incluída no arquivo \texttt{src/vigenere/attack.py}. Para a decifração da chave, foi utilizada a análise de frequências das letras. Para isso, foi obtida a lista de frequências padrão de cada letra na língua inglesa e portuguesa, e elas são usadas no programa para obter a diferença da frequência das letras na mensagem. A ocorrência que tiver a menor diferença representa uma letra da chave decifrada e este processo é feito em loop até encontrar toda a chave de acordo com seu tamanho obtido.
 
-Para obter o tamanho da chave, primeiramente são obtidas sequências de três letras do criptograma que se repetem e é analisada a distância entre elas. Os múltiplos dessa distância são "marcados" a cada vez e o número que tiver a maior quantidade de marcas ao final é o tamanho da chave. Esta abordagem funciona para muitos casos se o tamanho da chave for um número primo. Caso contrário, o valor retornado será algum dos múltiplos do tamanho da chave.
+Para obter o tamanho da chave, primeiramente são obtidas sequências de três letras do criptograma que se repetem e é analisada a distância entre elas. Os maior múltiplo dessa distância é "marcado" a cada vez e o número que tiver a maior quantidade de marcas ao final é o tamanho da chave.
 
 Em alguns casos, pode ser que o algoritmo de quebra da cifra de Vigenère não funcione corretamente. Um exemplo seria com mensagens muito pequenas já que é feita a análise de frequências. O tamanho mínimo testado que gerou o resultado esperado foi para uma mensagem de 1500 letras.
 
